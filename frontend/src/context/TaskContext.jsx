@@ -8,8 +8,8 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 const TaskProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [tasks, setTasks] = useState([]);  
-  const [editingTask,setEditingTask] = useState(null);
+  const [tasks, setTasks] = useState([]);
+  const [editingTask, setEditingTask] = useState(null);
 
   const createNewTask = async (taskData) => {
     setLoading(true);
@@ -99,7 +99,7 @@ const TaskProvider = ({ children }) => {
     setError(null);
     try {
       const response = await axios.put(`${BACKEND_URL}/api/v1/tasks/editTask/${taskId}`, taskData, { withCredentials: true });
-      console.log("Edit response of task",response.data);
+      console.log("Edit response of task", response.data);
       await getAllTasks();
       setEditingTask(null);
       return response.data;
@@ -112,8 +112,22 @@ const TaskProvider = ({ children }) => {
     }
   }
 
+  const getSingleTask = async (taskId) => {
+    setError(null);
+    setLoading(true);
+    try {
+      const response = await axios.get(`${BACKEND_URL}/api/v1/tasks/getTask/${taskId}`, { withCredentials: true });
+      return response.data; 
+    } catch (error) {
+      console.error("Error fetching single task:", error);
+      setError(error.response?.data || error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <TaskContext.Provider value={{ editTask, toggleTask, deleteAllTasks, deleteTask, createNewTask, getAllTasks,editingTask,setEditingTask, error, loading, tasks }}>
+    <TaskContext.Provider value={{ getSingleTask, editTask, toggleTask, deleteAllTasks, deleteTask, createNewTask, getAllTasks, editingTask, setEditingTask, error, loading, tasks }}>
       {children}
     </TaskContext.Provider>
   );

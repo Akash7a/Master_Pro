@@ -8,6 +8,7 @@ import Layout from "./component/Layout";
 import Profile from "./component/Profile";
 import EditProfilePage from "./pages/EditProfilePage";
 import { ToastContainer } from "react-toastify";
+import ViewSingleTask from "./component/ViewSingleTask";
 
 const App = () => {
   return (
@@ -29,6 +30,9 @@ const App = () => {
           />
           <Route path="/profile" element={<ProtectedRoute>
             <Profile />
+          </ProtectedRoute>} />
+          <Route path="/tasks/:taskId" element={<ProtectedRoute>
+            <ViewSingleTask />
           </ProtectedRoute>} />
           <Route path="/editProfile" element={<ProtectedRoute>
             <EditProfilePage />

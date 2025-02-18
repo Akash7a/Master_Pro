@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { TaskContext } from '../context/TaskContext';
+import { Link } from 'react-router-dom';
 
 const AllTasks = () => {
-  const {setEditingTask, tasks, loading, error, getAllTasks, deleteTask, deleteAllTasks, toggleTask } = useContext(TaskContext);
+  const { setEditingTask, tasks, loading, error, getAllTasks, deleteTask, deleteAllTasks, toggleTask } = useContext(TaskContext);
 
   useEffect(() => {
     getAllTasks();
@@ -33,6 +34,7 @@ const AllTasks = () => {
                     setEditingTask(null);
                   }
                 }}>📝</button>
+                <button className='text-2xl'><Link to={`/tasks/${task._id}`}>👁️</Link></button>
               </div>
               <p className={`absolute bottom-1 right-1 ${task.status === "pending" ? "text-yellow-600" : task.status === "completed" ? "text-green-600" : "text-black"}`}>
                 {task.status}
