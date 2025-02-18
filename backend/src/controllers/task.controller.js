@@ -2,6 +2,7 @@ import { Task } from "../models/task.model.js";
 import { ApiError } from "../utils/ApiError.util.js";
 import { ApiResponse } from "../utils/ApiResponse.util.js";
 import { asyncHandler } from "../utils/AsyncHandler.util.js";
+import mongoose from "mongoose";
 
 const addNewTasks = asyncHandler(async (req, res) => {
     const { title, description, priority, status } = req.body;
@@ -45,7 +46,9 @@ const deleteTask = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Task ID is required");
     }
 
-    const task = await Task.findById(id);
+    const taskId =new mongoose.Types.ObjectId(id);
+
+    const task = await Task.findById(taskId);
 
     if (!task) {
         throw new ApiError(404, "Task not found");
@@ -60,6 +63,7 @@ const deleteTask = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200,
         {
             message: "Task deleted successfully!",
+            deletedTask:task,
         }
     ));
 });
@@ -121,8 +125,11 @@ const getAllTasks = asyncHandler(async (req, res) => {
 
     const tasks = await Task.find({ assignedTo: userId });
 
-    if (!tasks.length) {
-        throw new ApiError(404, "No tasks found for this user");
+    if (!tasks || tasks.length === 0) {
+        return res.status(200).json(new ApiResponse(200, {
+            message: "No tasks found for this user",
+            tasks: [],
+        }));
     }
 
     return res.status(200).json(new ApiResponse(200, {
@@ -157,7 +164,7 @@ const toggleStatus = asyncHandler(async (req, res) => {
     const currentIndex = statusOrder.indexOf(task.status);
     const newIndex = (currentIndex + 1) % statusOrder.length;
 
-    task.status = statusOrder(newIndex);
+    task.status = statusOrder[newIndex];
     await task.save();
 
     return res.status(200).json(new ApiResponse(200, {
