@@ -9,6 +9,7 @@ const Signup = () => {
         email: "",
         password: "",
         profilePic: null,
+        role: ""
     });
     const { signUpUser, token, loading } = useContext(AppContext);
     const fileInputRef = useRef(null);
@@ -38,10 +39,13 @@ const Signup = () => {
         formData.append("fullname", userData.fullname);
         formData.append("username", userData.username);
         formData.append("email", userData.email);
+        formData.append("role",userData.role);
         formData.append("password", userData.password);
         formData.append("profilePic", userData.profilePic);
 
         signUpUser(formData);
+
+        console.log("frontend request",userData);
 
         if (fileInputRef.current) {
             fileInputRef.current.value = "";
@@ -51,6 +55,7 @@ const Signup = () => {
             username: "",
             email: "",
             password: "",
+            role:"",
             profilePic: null,
         });
     }
@@ -69,6 +74,21 @@ const Signup = () => {
                 <div className=''>
                     <label htmlFor="email">Email</label>
                     <input value={userData.email} required onChange={changeHandler} className='bg-gray-200 w-full p-2 my-1 outline-none text-md focus:bg-white rounded-md' type="text" id='email' name='email' placeholder='Enter your email' />
+                </div>
+                <div className="">
+                    <label htmlFor="role">Role</label>
+                    <select
+                        name="role"
+                        id="role"
+                        value={userData.role}
+                        onChange={changeHandler}
+                        required
+                        className="bg-gray-200 w-full p-2 my-1 outline-none text-md focus:bg-white rounded-md cursor-pointer border border-gray-300 hover:border-gray-500 focus:ring focus:ring-green-300"
+                    >
+                        <option value="">Select your role</option>
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                    </select>
                 </div>
                 <div className=''>
                     <label htmlFor="profilePic">Profile Pic</label>

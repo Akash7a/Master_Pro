@@ -10,6 +10,7 @@ const AppProvider = ({ children }) => {
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [users,setUsers] = useState([]);
 
     useEffect(() => {
         const storedToken = localStorage.getItem("authToken");
@@ -148,14 +149,30 @@ const AppProvider = ({ children }) => {
         }
     };
 
+    const getAlluserProfiles = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await axios.get(`${BACKEND_URL}/api/v1/users/getAllusers`, { withCredentials: true });
+            setUsers(response.data.users || response.data.data.users || []);
+            return response.data;
+        } catch (error) {
+            console.error("Error while fetching all users", error);
+            setError(error.response?.data?.message || error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+    
     useEffect(() => {
         if (token) {
             getUserProfile();
+            getAlluserProfiles();
         }
     }, [token]);
-
+    
     return (
-        <AppContext.Provider value={{ logoutUser, signUpUser, loginUser, getUserProfile, editUserProfile, profile, token, setLoading, loading, error }}>
+        <AppContext.Provider value={{ logoutUser,users, signUpUser, loginUser, getUserProfile, editUserProfile,getAlluserProfiles, profile, token, setLoading, loading, error }}>
             {children}
         </AppContext.Provider>
     );

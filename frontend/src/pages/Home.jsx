@@ -2,6 +2,7 @@ import React, { useContext, useRef } from 'react';
 import { AppContext } from '../context/UserContext';
 import AddnewTasks from '../component/AddnewTasks';
 import AllTasks from '../component/AllTasks';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
   const { profile } = useContext(AppContext);
@@ -44,15 +45,21 @@ const Home = () => {
           <AllTasks />
         </div>
         <div className="p-6 bg-white rounded-lg shadow-md text-center">
+          <h3 className="text-xl font-semibold text-gray-700">
+          Team Collaboration
+          <span className='underline inline-block text-blue-300'>
+          <Link to="/allusers">
+            Click here for Collaboration
+          </Link>
+          </span>
+          </h3>
+          <p className="text-gray-500 mt-2">Work together with your team in real-time.</p>
+        </div>
+        <div className="p-6 bg-white rounded-lg shadow-md text-center">
           <h3 className="text-xl font-semibold text-gray-700">AI Assistance</h3>
           <p className="text-gray-500 mt-2">Get smart suggestions for optimizing your workflow.</p>
         </div>
-        <div className="p-6 bg-white rounded-lg shadow-md text-center">
-          <h3 className="text-xl font-semibold text-gray-700">Team Collaboration</h3>
-          <p className="text-gray-500 mt-2">Work together with your team in real-time.</p>
-        </div>
       </div>
-      {/* Footer Section */}
       <footer className="mt-16 text-gray-600 text-center">
         <p>© 2025 TaskMaster Pro. All rights reserved.</p>
       </footer>

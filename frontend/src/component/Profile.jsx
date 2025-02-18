@@ -28,6 +28,7 @@ const Profile = () => {
         <div className="mt-2 p-4 bg-gray-100 rounded-lg">
           <p><strong>Username:</strong> {profile.username}</p>
           <p><strong>Joined:</strong> {new Date(profile.createdAt).toDateString()}</p>
+          <p><strong>Role:</strong> {profile.role.toUpperCase()}</p>
         </div>
       </div>
 

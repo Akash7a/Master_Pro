@@ -12,9 +12,10 @@ const options = {
 }
 
 const signupUser = asyncHandler(async (req, res) => {
-    const { fullname, username, email, password } = req.body;
+    console.log("body",req.body);
+    const { fullname, username, email, password, role } = req.body;
 
-    if ([fullname, username, email, password].some(dets => !dets)) {
+    if ([fullname, username, email, password,role].some(dets => !dets)) {
         throw new ApiError(400, "All fields are required");
     }
 
@@ -39,6 +40,7 @@ const signupUser = asyncHandler(async (req, res) => {
             email,
             password,
             profilePic: profilePicUrl,
+            role,
         }
     );
 
@@ -184,6 +186,18 @@ const updateUser = asyncHandler(async (req, res) => {
     ))
 });
 
+const getAllUser = asyncHandler(async (req, res) => {
+    if (req.user.role !== "admin") {
+        return res.status(403).json({ message: "Access denied. Admins only." });
+    }
+
+    const users = await User.find({ _id: { $ne: req.user.id } }).select("-password");
+    return res.status(200).json(new ApiResponse(200,{
+        message:"all users fetched successfully",
+        users:users,
+    }));
+});
+
 export {
     signupUser,
     loginUser,
@@ -191,4 +205,5 @@ export {
     deleteUser,
     getUserProfile,
     updateUser,
+    getAllUser,
 }
